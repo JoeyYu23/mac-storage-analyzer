@@ -4,18 +4,19 @@ A developer-aware Mac storage analyzer. Identifies what's eating your disk and g
 
 ## Features
 
-- Categorizes storage by developer-specific types (Docker, npm, venv, models, caches, git)
+- Categorizes storage by developer-specific types (Docker, npm, venv, models, caches, Xcode)
 - Gives specific, actionable recommendations per category
-- Fast CLI with colored output + JSON mode
-- Optional web dashboard
+- Ranks by potential savings — biggest wins first
+- Fast CLI with colored output + JSON mode for scripting
 
 ## Usage
 
 ```bash
-python analyzer.py scan          # Full disk scan
-python analyzer.py scan --json   # JSON output
-python analyzer.py clean docker  # Show Docker cleanup commands
-python analyzer.py report        # Summary with recommendations
+python analyzer.py scan              # Full disk scan with colored report
+python analyzer.py scan --json       # JSON output (for scripts / AI consumption)
+python analyzer.py scan --path ~/Projects  # Scan specific directory
+python analyzer.py clean             # Show safe cleanup commands
+python analyzer.py report            # Alias for scan
 ```
 
 ## Install
@@ -23,5 +24,27 @@ python analyzer.py report        # Summary with recommendations
 ```bash
 git clone https://github.com/JoeyYu23/mac-storage-analyzer
 cd mac-storage-analyzer
-pip install -r requirements.txt
+pip install -e .
 ```
+
+Or without packaging:
+
+```bash
+pip install -r requirements.txt
+python analyzer.py scan
+```
+
+## Architecture
+
+```
+analyzer.py      CLI entry point (argparse)
+scanner.py       Disk scanning engine (du, find, docker, df)
+display.py       Rich terminal output (tables, panels, bars)
+recommender.py   Recommendation engine (ranked by savings)
+```
+
+## Requirements
+
+- Python 3.10+
+- macOS (uses `du`, `find`, `df` commands)
+- Optional: Docker CLI (for Docker storage scanning)

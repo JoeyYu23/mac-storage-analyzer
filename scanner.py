@@ -123,15 +123,16 @@ def _parse_docker_size(size_str: str) -> int:
     size_str = size_str.strip()
     if not size_str or size_str == "0B":
         return 0
-    multipliers = {
-        "B": 1 / 1024,
-        "KB": 1,
-        "kB": 1,
-        "MB": 1024,
-        "GB": 1024 * 1024,
-        "TB": 1024 * 1024 * 1024,
-    }
-    for suffix, mult in multipliers.items():
+    # Check longest suffixes first to avoid "GB".endswith("B") matching "B"
+    multipliers = [
+        ("TB", 1024 * 1024 * 1024),
+        ("GB", 1024 * 1024),
+        ("MB", 1024),
+        ("KB", 1),
+        ("kB", 1),
+        ("B", 1 / 1024),
+    ]
+    for suffix, mult in multipliers:
         if size_str.endswith(suffix):
             try:
                 value = float(size_str[: -len(suffix)])

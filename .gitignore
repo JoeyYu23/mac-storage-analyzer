@@ -1,0 +1,5 @@
+.PROJECT.md
+.memory/
+.env
+__pycache__/
+*.pyc

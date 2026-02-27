@@ -105,8 +105,6 @@ def cmd_clean(args: argparse.Namespace) -> None:
 
     console.print("[bold]Safe cleanup commands (review before running):[/bold]\n")
     for i, rec in enumerate(safe_recs, start=1):
-        from scanner import kb_to_gb
-        size = kb_to_gb(0)  # placeholder
         console.print(f"[bold]{i}. {rec['label']}[/bold] ({rec['size_gb']:.1f} GB)")
         console.print(f"   [red]{rec['command']}[/red]\n")
 
